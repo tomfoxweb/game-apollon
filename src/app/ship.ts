@@ -7,9 +7,11 @@ import {
   calcAcceleration,
   calcAltitude,
   calcFuelConsumption,
+  calcTimeBeforeLanding,
   calcVelocity,
   isSafeLandingVelocity,
   MOON_GRAVITY,
+  solveQuadraticEquation,
 } from './physics';
 
 export class Ship {
@@ -45,19 +47,40 @@ export class Ship {
 
   move(timeForMove: number): void {
     const acceleration = this.calculateAcceleration();
-    this.altitude = calcAltitude(
+    const altitude = calcAltitude(
       this.altitude,
       this.velocity,
       acceleration,
       timeForMove
     );
-    if (this.altitude < 0) {
-      this.altitude = 0;
-    }
-    this.velocity = calcVelocity(this.velocity, acceleration, timeForMove);
+    const timeForVelocity =
+      altitude > 0
+        ? timeForMove
+        : calcTimeBeforeLanding(
+            this.altitude,
+            this.velocity,
+            acceleration,
+            timeForMove
+          );
+    this.altitude = altitude > 0 ? altitude : 0;
+    this.velocity = calcVelocity(this.velocity, acceleration, timeForVelocity);
     this.fuelAmount = this.calculateFuelAmount(timeForMove);
     if (this.fuelAmount === 0) {
       this.turnOffEngine();
+    }
+  }
+
+  private calculateTimeForVelocity(acceleration: number): number {
+    const a = acceleration / 2;
+    const b = this.velocity;
+    const c = this.altitude;
+    const [x1, x2] = solveQuadraticEquation(a, b, c);
+    if (x1 > 0) {
+      return x1;
+    } else if (x2 > 0) {
+      return x2;
+    } else {
+      throw new Error('time calculation error');
     }
   }
 

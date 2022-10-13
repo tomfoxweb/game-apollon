@@ -14,6 +14,21 @@ export function calcAltitude(
   return h0 + v0 * t + (a * t * t) / 2;
 }
 
+export function calcTimeBeforeLanding(
+  h0: number,
+  v0: number,
+  a: number,
+  t: number
+): number {
+  const [x1, x2] = solveQuadraticEquation(a / 2, v0, h0);
+  if (x1 > 0) {
+    return x1;
+  } else if (x2 > 0) {
+    return x2;
+  }
+  throw new Error('Irrational solve');
+}
+
 export function calcAcceleration(...accelerations: number[]): number {
   return accelerations.reduce((sum, current) => sum + current, 0);
 }
@@ -35,4 +50,20 @@ export function calcFuelConsumption(
 
 export function isSafeLandingVelocity(velocity: number): boolean {
   return Math.abs(velocity) <= MAX_SAFE_LANDING_VELOCITY;
+}
+
+export function solveQuadraticEquation(
+  a: number,
+  b: number,
+  c: number
+): [number, number] {
+  const D = b * b - 4 * a * c;
+  if (D < 0) {
+    throw new Error('Irrational');
+  }
+  const sqrtOfD = Math.sqrt(D);
+  const x1 = (-b - sqrtOfD) / (2 * a);
+  const x2 = (-b + sqrtOfD) / (2 * a);
+
+  return [x1, x2];
 }

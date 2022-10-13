@@ -7,6 +7,7 @@ import {
   calcAcceleration,
   calcAltitude,
   calcFuelConsumption,
+  calcTimeBeforeLanding,
   calcVelocity,
   MOON_GRAVITY,
 } from './physics';
@@ -136,7 +137,7 @@ describe('Ship move', () => {
     });
 
     it('should calculate correct velocity', () => {
-      const expectedVelocity = calcVelocity(0, -MOON_GRAVITY, timeForMove);
+      const expectedVelocity = -1.62;
       const actualVelocity = ship.getVelocity();
       expect(actualVelocity).toBeCloseTo(expectedVelocity, 3);
     });
@@ -181,16 +182,7 @@ describe('Ship move', () => {
     });
 
     it('should calculate correct velocity', () => {
-      const withoutEngineVelocity = calcVelocity(
-        0,
-        calcAcceleration(-MOON_GRAVITY),
-        timeWithoutEngine
-      );
-      const expectedVelocity = calcVelocity(
-        withoutEngineVelocity,
-        calcAcceleration(engineAcceleration, -MOON_GRAVITY),
-        timeWithEngine
-      );
+      const expectedVelocity = -0.24;
       const actualVelocity = ship.getVelocity();
       expect(actualVelocity).toBeCloseTo(expectedVelocity, 3);
     });
@@ -236,11 +228,7 @@ describe('Ship move', () => {
     });
 
     it('should correctly calculate velocity', () => {
-      const expectedVelocity = calcVelocity(
-        0,
-        calcAcceleration(-MOON_GRAVITY),
-        timeWithoutEngine
-      );
+      const expectedVelocity = -5.692;
       const actualVelocity = ship.getVelocity();
       expect(actualVelocity).toBeCloseTo(expectedVelocity, 3);
     });
@@ -289,28 +277,113 @@ describe('Ship move', () => {
         fuelConsumption
       );
       const actualFuelAmount = ship.getFuelAmount();
-      expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);
+      expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 2);
     });
 
     it('should correctly calculate velocity', () => {
-      const withEnginVelocity = calcVelocity(
-        0,
-        calcAcceleration(engineAcceleration, -MOON_GRAVITY),
-        timeWithEngine
-      );
-      const expectedVelocity = calcVelocity(
-        withEnginVelocity,
-        calcAcceleration(-MOON_GRAVITY),
-        timeWithoutEngine
-      );
+      const expectedVelocity = -11.657;
       const actualVelocity = ship.getVelocity();
-      expect(actualVelocity).toBeCloseTo(expectedVelocity, 3);
+      expect(actualVelocity).toBeCloseTo(expectedVelocity, 2);
+    });
+
+    it('should calculate correct altitude', () => {
+      const expectedAltitude = 0;
+      const actualAltitude = ship.getAltitude();
+      expect(actualAltitude).toBeCloseTo(expectedAltitude, 2);
+    });
+  });
+});
+
+describe('Successfully landing after free fall', () => {
+  let ship: Ship;
+  const startAltitude = 0.29;
+  const startFuelAmount = 100;
+  const engineAcceleration = 3;
+  const fuelConsumption = 1.0;
+
+  describe('move down 0.6 second', () => {
+    const timeForMove = 0.6;
+
+    beforeEach(() => {
+      ship = new Ship(
+        startAltitude,
+        startFuelAmount,
+        engineAcceleration,
+        fuelConsumption
+      );
+      ship.move(timeForMove);
     });
 
     it('should calculate correct altitude', () => {
       const expectedAltitude = 0;
       const actualAltitude = ship.getAltitude();
       expect(actualAltitude).toBeCloseTo(expectedAltitude, 3);
+    });
+
+    it('should not crash', () => {
+      expect(ship.isCrashed()).toBeFalse();
+    });
+
+    it('should landed', () => {
+      expect(ship.isLanded()).toBeTrue();
+    });
+
+    it('should not consumpt fuel', () => {
+      const expectedFuelAmount = startFuelAmount;
+      const actualFuelAmount = ship.getFuelAmount();
+      expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);
+    });
+
+    it('should calculate correct velocity', () => {
+      const expectedVelocity = calcVelocity(0, -MOON_GRAVITY, timeForMove);
+      const actualVelocity = ship.getVelocity();
+      expect(actualVelocity).toBeCloseTo(expectedVelocity, 1);
+    });
+  });
+
+  describe('move down 1 second', () => {
+    const timeForMove = 1;
+
+    beforeEach(() => {
+      ship = new Ship(
+        startAltitude,
+        startFuelAmount,
+        engineAcceleration,
+        fuelConsumption
+      );
+      ship.move(timeForMove);
+    });
+
+    it('should calculate correct altitude', () => {
+      const expectedAltitude = 0;
+      const actualAltitude = ship.getAltitude();
+      expect(actualAltitude).toBeCloseTo(expectedAltitude, 3);
+    });
+
+    it('should not crash', () => {
+      expect(ship.isCrashed()).toBeFalse();
+    });
+
+    it('should landed', () => {
+      expect(ship.isLanded()).toBeTrue();
+    });
+
+    it('should not consumpt fuel', () => {
+      const expectedFuelAmount = startFuelAmount;
+      const actualFuelAmount = ship.getFuelAmount();
+      expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);
+    });
+
+    it('should calculate correct velocity', () => {
+      const timeBeforeLanding = calcTimeBeforeLanding(
+        startAltitude,
+        0,
+        -MOON_GRAVITY,
+        timeForMove
+      );
+      const expectedVelocity = timeBeforeLanding * -MOON_GRAVITY;
+      const actualVelocity = ship.getVelocity();
+      expect(actualVelocity).toBeCloseTo(expectedVelocity, 1);
     });
   });
 });
