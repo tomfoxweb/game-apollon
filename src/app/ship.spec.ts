@@ -386,4 +386,73 @@ describe('Successfully landing after free fall', () => {
       expect(actualVelocity).toBeCloseTo(expectedVelocity, 1);
     });
   });
+
+  describe('move down 0.2s up 0.1s down 1s', () => {
+    const time1down = 0.2;
+    const time2up = 0.1;
+    const time3down = 1.0;
+
+    beforeEach(() => {
+      ship = new Ship(
+        startAltitude,
+        startFuelAmount,
+        engineAcceleration,
+        fuelConsumption
+      );
+      ship.move(time1down);
+      ship.turnOnEngine();
+      ship.move(time2up);
+      ship.turnOffEngine();
+      ship.move(time3down);
+    });
+
+    it('should not crash', () => {
+      expect(ship.isCrashed()).toBeFalse();
+    });
+
+    it('should be landed', () => {
+      expect(ship.isLanded()).toBeTrue();
+    });
+
+    it('should consumpt some amount of fuel', () => {
+      const expectedFuelAmount = calcFuelConsumption(
+        startFuelAmount,
+        time2up,
+        fuelConsumption
+      );
+      const actualFuelAmount = ship.getFuelAmount();
+      expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 2);
+    });
+
+    it('should correctly calculate velocity', () => {
+      const velocityDown1 = calcVelocity(0, -MOON_GRAVITY, time1down);
+      const altitudeDown1 = calcAltitude(
+        startAltitude,
+        0,
+        -MOON_GRAVITY,
+        time1down
+      );
+      const altitudeUp2 = calcAltitude(
+        altitudeDown1,
+        velocityDown1,
+        calcAcceleration(engineAcceleration, -MOON_GRAVITY),
+        time2up
+      );
+      const timeBeforeLanding = calcTimeBeforeLanding(
+        altitudeUp2,
+        0,
+        -MOON_GRAVITY,
+        time3down
+      );
+      const expectedVelocity = timeBeforeLanding * -MOON_GRAVITY;
+      const actualVelocity = ship.getVelocity();
+      expect(actualVelocity).toBeCloseTo(expectedVelocity, 1);
+    });
+
+    it('should calculate correct altitude', () => {
+      const expectedAltitude = 0;
+      const actualAltitude = ship.getAltitude();
+      expect(actualAltitude).toBeCloseTo(expectedAltitude, 2);
+    });
+  });
 });
