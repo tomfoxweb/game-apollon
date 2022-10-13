@@ -2,6 +2,13 @@ import {
   NonPositiveAltitudeError,
   NonPositiveFuelAmountError,
 } from './game-error';
+import {
+  calcAcceleration,
+  calcAltitude,
+  calcFuelConsumption,
+  calcVelocity,
+  MOON_GRAVITY,
+} from './physics';
 import { Ship } from './ship';
 
 describe('Ship constructor throw Errors', () => {
@@ -87,21 +94,11 @@ describe('Ship constructor init properties', () => {
   });
 });
 
-function calcVelocity(v0: number, a: number, t: number): number {
-  return v0 + a * t;
-}
-
-function calcAltitude(h0: number, v0: number, a: number, t: number): number {
-  return h0 + v0 * t + (a * t * t) / 2;
-}
-
 describe('Ship move', () => {
   let ship: Ship;
   const startAltitude = 10;
   const startFuelAmount = 5;
-  const MOON_GRAVITY = -1.62;
   const SHIP_ACCELERATION = 3;
-  const SHIP_UP_ACCELERATION = SHIP_ACCELERATION - MOON_GRAVITY;
   const FUEL_CONSUMPTION = 1.0;
 
   describe('move down 1 second', () => {
@@ -121,7 +118,7 @@ describe('Ship move', () => {
       const expectedAltitude = calcAltitude(
         startAltitude,
         0,
-        MOON_GRAVITY,
+        -MOON_GRAVITY,
         timeForMove
       );
       const actualAltitude = ship.getAltitude();
@@ -139,7 +136,7 @@ describe('Ship move', () => {
     });
 
     it('should calculate correct velocity', () => {
-      const expectedVelocity = calcVelocity(0, MOON_GRAVITY, timeForMove);
+      const expectedVelocity = calcVelocity(0, -MOON_GRAVITY, timeForMove);
       const actualVelocity = ship.getVelocity();
       expect(actualVelocity).toBeCloseTo(expectedVelocity, 3);
     });
@@ -165,18 +162,18 @@ describe('Ship move', () => {
       const withoutEngineAltitude = calcAltitude(
         startAltitude,
         0,
-        MOON_GRAVITY,
+        calcAcceleration(-MOON_GRAVITY),
         timeWithoutEngine
       );
       const withoutEngineVelocity = calcVelocity(
         0,
-        MOON_GRAVITY,
+        calcAcceleration(-MOON_GRAVITY),
         timeWithoutEngine
       );
       const expectedAltitude = calcAltitude(
         withoutEngineAltitude,
         withoutEngineVelocity,
-        SHIP_UP_ACCELERATION,
+        calcAcceleration(SHIP_ACCELERATION, -MOON_GRAVITY),
         timeWithEngine
       );
       const actualAltitude = ship.getAltitude();
@@ -186,12 +183,12 @@ describe('Ship move', () => {
     it('should calculate correct velocity', () => {
       const withoutEngineVelocity = calcVelocity(
         0,
-        MOON_GRAVITY,
+        calcAcceleration(-MOON_GRAVITY),
         timeWithoutEngine
       );
       const expectedVelocity = calcVelocity(
         withoutEngineVelocity,
-        SHIP_UP_ACCELERATION,
+        calcAcceleration(SHIP_ACCELERATION, -MOON_GRAVITY),
         timeWithEngine
       );
       const actualVelocity = ship.getVelocity();
@@ -199,8 +196,11 @@ describe('Ship move', () => {
     });
 
     it('should consumpt 1 amount of fuel', () => {
-      const expectedFuelAmount =
-        startFuelAmount - FUEL_CONSUMPTION * timeWithEngine;
+      const expectedFuelAmount = calcFuelConsumption(
+        startFuelAmount,
+        timeWithEngine,
+        FUEL_CONSUMPTION
+      );
       const actualFuelAmount = ship.getFuelAmount();
       expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);
     });

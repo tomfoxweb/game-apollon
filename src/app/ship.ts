@@ -2,13 +2,19 @@ import {
   NonPositiveAltitudeError,
   NonPositiveFuelAmountError,
 } from './game-error';
+import {
+  calcAcceleration,
+  calcAltitude,
+  calcFuelConsumption,
+  calcVelocity,
+  MOON_GRAVITY,
+} from './physics';
 
 export class Ship {
   private altitude: number;
   private fuelAmount: number;
   private velocity: number;
   private engineEnabled: boolean;
-  private readonly MOON_GRAVITY = -1.62;
   private readonly SHIP_ACCELERATION = 3.0;
   private readonly FUEL_CONSUMPTION = 1.0;
 
@@ -27,39 +33,26 @@ export class Ship {
 
   move(timeForMove: number): boolean {
     const acceleration = this.engineEnabled
-      ? this.SHIP_ACCELERATION - this.MOON_GRAVITY
-      : this.MOON_GRAVITY;
-    this.altitude = this.calcAltitude(
+      ? calcAcceleration(this.SHIP_ACCELERATION, -MOON_GRAVITY)
+      : calcAcceleration(-MOON_GRAVITY);
+    this.altitude = calcAltitude(
       this.altitude,
       this.velocity,
       acceleration,
       timeForMove
     );
-    this.velocity = this.calcVelocity(this.velocity, acceleration, timeForMove);
-    this.fuelAmount = this.calcFuelConsumption(timeForMove);
+    this.velocity = calcVelocity(this.velocity, acceleration, timeForMove);
+    if (this.engineEnabled) {
+      this.fuelAmount = calcFuelConsumption(
+        this.fuelAmount,
+        timeForMove,
+        this.FUEL_CONSUMPTION
+      );
+    }
     if (this.altitude < 0) {
       return false;
     }
     return true;
-  }
-
-  private calcVelocity(v0: number, a: number, t: number): number {
-    return v0 + a * t;
-  }
-
-  private calcAltitude(h0: number, v0: number, a: number, t: number): number {
-    return h0 + v0 * t + (a * t * t) / 2;
-  }
-
-  private calcFuelConsumption(timeForMove: number): number {
-    if (!this.engineEnabled) {
-      return this.fuelAmount;
-    }
-    let fuelAmount = this.fuelAmount - timeForMove * this.FUEL_CONSUMPTION;
-    if (fuelAmount < 0) {
-      fuelAmount = 0;
-    }
-    return fuelAmount;
   }
 
   turnOnEngine(): void {
