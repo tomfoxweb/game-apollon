@@ -246,12 +246,7 @@ describe('Ship move', () => {
     });
 
     it('should calculate correct altitude', () => {
-      const expectedAltitude = calcAltitude(
-        startAltitude,
-        0,
-        calcAcceleration(-MOON_GRAVITY),
-        timeWithoutEngine
-      );
+      const expectedAltitude = 0;
       const actualAltitude = ship.getAltitude();
       expect(actualAltitude).toBeCloseTo(expectedAltitude, 3);
     });
@@ -260,6 +255,62 @@ describe('Ship move', () => {
       const expectedFuelAmount = startFuelAmount;
       const actualFuelAmount = ship.getFuelAmount();
       expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);
+    });
+  });
+
+  describe('move and consumpt all fuel', () => {
+    const timeWithEngine = 5.0;
+    const timeWithoutEngine = 20.0;
+
+    beforeEach(() => {
+      ship = new Ship(
+        startAltitude,
+        startFuelAmount,
+        engineAcceleration,
+        fuelConsumption
+      );
+      ship.turnOnEngine();
+      ship.move(timeWithEngine);
+      ship.move(timeWithoutEngine);
+    });
+
+    it('should crash', () => {
+      expect(ship.isCrashed()).toBeTrue();
+    });
+
+    it('should be landed', () => {
+      expect(ship.isLanded()).toBeTrue();
+    });
+
+    it('should consumpt all amount of fuel', () => {
+      const expectedFuelAmount = calcFuelConsumption(
+        startFuelAmount,
+        timeWithEngine,
+        fuelConsumption
+      );
+      const actualFuelAmount = ship.getFuelAmount();
+      expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);
+    });
+
+    it('should correctly calculate velocity', () => {
+      const withEnginVelocity = calcVelocity(
+        0,
+        calcAcceleration(engineAcceleration, -MOON_GRAVITY),
+        timeWithEngine
+      );
+      const expectedVelocity = calcVelocity(
+        withEnginVelocity,
+        calcAcceleration(-MOON_GRAVITY),
+        timeWithoutEngine
+      );
+      const actualVelocity = ship.getVelocity();
+      expect(actualVelocity).toBeCloseTo(expectedVelocity, 3);
+    });
+
+    it('should calculate correct altitude', () => {
+      const expectedAltitude = 0;
+      const actualAltitude = ship.getAltitude();
+      expect(actualAltitude).toBeCloseTo(expectedAltitude, 3);
     });
   });
 });

@@ -44,27 +44,49 @@ export class Ship {
   }
 
   move(timeForMove: number): void {
-    const acceleration = this.engineEnabled
-      ? calcAcceleration(this.engineAcceleration, -MOON_GRAVITY)
-      : calcAcceleration(-MOON_GRAVITY);
+    const acceleration = this.calculateAcceleration();
     this.altitude = calcAltitude(
       this.altitude,
       this.velocity,
       acceleration,
       timeForMove
     );
+    if (this.altitude < 0) {
+      this.altitude = 0;
+    }
     this.velocity = calcVelocity(this.velocity, acceleration, timeForMove);
-    if (this.engineEnabled) {
-      this.fuelAmount = calcFuelConsumption(
-        this.fuelAmount,
-        timeForMove,
-        this.fuelConsumption
-      );
+    this.fuelAmount = this.calculateFuelAmount(timeForMove);
+    if (this.fuelAmount === 0) {
+      this.turnOffEngine();
     }
   }
 
+  private calculateAcceleration(): number {
+    if (!this.engineEnabled) {
+      return calcAcceleration(-MOON_GRAVITY);
+    }
+    return calcAcceleration(this.engineAcceleration, -MOON_GRAVITY);
+  }
+
+  private calculateFuelAmount(timeForMove: number): number {
+    if (!this.engineEnabled) {
+      return this.fuelAmount;
+    }
+    return calcFuelConsumption(
+      this.fuelAmount,
+      timeForMove,
+      this.fuelConsumption
+    );
+  }
+
   turnOnEngine(): void {
-    this.engineEnabled = true;
+    if (this.fuelAmount > 0) {
+      this.engineEnabled = true;
+    }
+  }
+
+  turnOffEngine(): void {
+    this.engineEnabled = false;
   }
 
   getAltitude(): number {
@@ -87,6 +109,6 @@ export class Ship {
   }
 
   isLanded(): boolean {
-    return this.altitude <= 0;
+    return this.altitude === 0;
   }
 }
