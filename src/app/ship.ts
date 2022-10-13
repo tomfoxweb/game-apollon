@@ -11,7 +11,6 @@ import {
   calcVelocity,
   isSafeLandingVelocity,
   MOON_GRAVITY,
-  solveQuadraticEquation,
 } from './physics';
 
 export class Ship {
@@ -70,20 +69,6 @@ export class Ship {
     }
   }
 
-  private calculateTimeForVelocity(acceleration: number): number {
-    const a = acceleration / 2;
-    const b = this.velocity;
-    const c = this.altitude;
-    const [x1, x2] = solveQuadraticEquation(a, b, c);
-    if (x1 > 0) {
-      return x1;
-    } else if (x2 > 0) {
-      return x2;
-    } else {
-      throw new Error('time calculation error');
-    }
-  }
-
   private calculateAcceleration(): number {
     if (!this.engineEnabled) {
       return calcAcceleration(-MOON_GRAVITY);
@@ -133,5 +118,9 @@ export class Ship {
 
   isLanded(): boolean {
     return this.altitude === 0;
+  }
+
+  isEngineEnabled(): boolean {
+    return this.engineEnabled;
   }
 }
