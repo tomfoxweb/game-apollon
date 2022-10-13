@@ -60,8 +60,8 @@ describe('Ship constructor init properties', () => {
   let ship: Ship;
   const startAltitude = 10;
   const startFuelAmount = 5;
-  const engineAcceleration = 2;
-  const fuelConsumption = 2;
+  const engineAcceleration = 3;
+  const fuelConsumption = 1;
 
   beforeEach(() => {
     ship = new Ship(
@@ -84,6 +84,10 @@ describe('Ship constructor init properties', () => {
   it('should not crash on start', () => {
     expect(ship.isCrashed()).toBeFalse();
   });
+
+  it('should not landed on start', () => {
+    expect(ship.isLanded()).toBeFalse();
+  });
 });
 
 describe('Ship move', () => {
@@ -95,7 +99,6 @@ describe('Ship move', () => {
 
   describe('move down 1 second', () => {
     const timeForMove = 1.0;
-    let isMoved = false;
 
     beforeEach(() => {
       ship = new Ship(
@@ -104,11 +107,7 @@ describe('Ship move', () => {
         engineAcceleration,
         fuelConsumption
       );
-      isMoved = ship.move(timeForMove);
-    });
-
-    it('should move', () => {
-      expect(isMoved).toBeTrue();
+      ship.move(timeForMove);
     });
 
     it('should calculate correct altitude', () => {
@@ -124,6 +123,10 @@ describe('Ship move', () => {
 
     it('should not crash', () => {
       expect(ship.isCrashed()).toBeFalse();
+    });
+
+    it('should not landed', () => {
+      expect(ship.isLanded()).toBeFalse();
     });
 
     it('should not consumpt fuel', () => {
@@ -142,7 +145,6 @@ describe('Ship move', () => {
   describe('move down for 1 second then enable engine for 1 second', () => {
     const timeWithoutEngine = 1.0;
     const timeWithEngine = 1.0;
-    let isMoved = false;
 
     beforeEach(() => {
       ship = new Ship(
@@ -153,11 +155,7 @@ describe('Ship move', () => {
       );
       ship.move(timeWithoutEngine);
       ship.turnOnEngine();
-      isMoved = ship.move(timeWithEngine);
-    });
-
-    it('should move', () => {
-      expect(isMoved).toBeTrue();
+      ship.move(timeWithEngine);
     });
 
     it('should calculate correct altitude', () => {
@@ -209,6 +207,10 @@ describe('Ship move', () => {
 
     it('should not crash', () => {
       expect(ship.isCrashed()).toBeFalse();
+    });
+
+    it('should not landed', () => {
+      expect(ship.isLanded()).toBeFalse();
     });
   });
 });

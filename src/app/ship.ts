@@ -42,7 +42,7 @@ export class Ship {
     this.engineEnabled = false;
   }
 
-  move(timeForMove: number): boolean {
+  move(timeForMove: number): void {
     const acceleration = this.engineEnabled
       ? calcAcceleration(this.engineAcceleration, -MOON_GRAVITY)
       : calcAcceleration(-MOON_GRAVITY);
@@ -60,10 +60,6 @@ export class Ship {
         this.fuelConsumption
       );
     }
-    if (this.altitude < 0) {
-      return false;
-    }
-    return true;
   }
 
   turnOnEngine(): void {
@@ -83,6 +79,10 @@ export class Ship {
   }
 
   isCrashed(): boolean {
+    return false;
+  }
+
+  isLanded(): boolean {
     return false;
   }
 }
