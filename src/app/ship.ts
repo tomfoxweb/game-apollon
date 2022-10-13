@@ -7,6 +7,7 @@ export class Ship {
   private altitude: number;
   private fuelAmount: number;
   private velocity: number;
+  private readonly MOON_GRAVITY = -1.62;
 
   constructor(altitude: number, fuelAmount: number) {
     if (altitude <= 0) {
@@ -18,6 +19,12 @@ export class Ship {
     this.altitude = altitude;
     this.fuelAmount = fuelAmount;
     this.velocity = 0;
+  }
+
+  move(timeForMove: number): boolean {
+    this.velocity = this.MOON_GRAVITY;
+    this.altitude = this.altitude + (this.MOON_GRAVITY * timeForMove ** 2) / 2;
+    return true;
   }
 
   getAltitude(): number {

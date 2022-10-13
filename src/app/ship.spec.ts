@@ -86,3 +86,44 @@ describe('Ship constructor init properties', () => {
     expect(ship.isCrashed()).toBeFalse();
   });
 });
+
+describe('Ship move on 1 second without enabled engine', () => {
+  let ship: Ship;
+  const startAltitude = 10;
+  const startFuelAmount = 5;
+  const timeForMove = 1.0;
+  let isMoved = false;
+  const MOON_GRAVITY = -1.62;
+
+  beforeEach(() => {
+    ship = new Ship(startAltitude, startFuelAmount);
+    isMoved = ship.move(timeForMove);
+  });
+
+  it('should move', () => {
+    expect(isMoved).toBeTrue();
+  });
+
+  it('should calculate correct altitude', () => {
+    const expectedAltitude =
+      startAltitude + (MOON_GRAVITY * timeForMove ** 2) / 2;
+    const actualAltitude = ship.getAltitude();
+    expect(actualAltitude).toBeCloseTo(expectedAltitude, 3);
+  });
+
+  it('should not crash', () => {
+    expect(ship.isCrashed()).toBeFalse();
+  });
+
+  it('should not consumpt fuel', () => {
+    const expectedFuelAmount = startFuelAmount;
+    const actualFuelAmount = ship.getFuelAmount();
+    expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);
+  });
+
+  it('should calculate correct velocity', () => {
+    const expectedVelocity = MOON_GRAVITY;
+    const actualVelocity = ship.getVelocity();
+    expect(actualVelocity).toBeCloseTo(expectedVelocity, 3);
+  });
+});
