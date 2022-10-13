@@ -213,4 +213,53 @@ describe('Ship move', () => {
       expect(ship.isLanded()).toBeFalse();
     });
   });
+
+  describe('move down for 4 seconds without engine', () => {
+    const timeWithoutEngine = 4.0;
+
+    beforeEach(() => {
+      ship = new Ship(
+        startAltitude,
+        startFuelAmount,
+        engineAcceleration,
+        fuelConsumption
+      );
+      ship.move(timeWithoutEngine);
+    });
+
+    it('should crash', () => {
+      expect(ship.isCrashed()).toBeTrue();
+    });
+
+    it('should be landed', () => {
+      expect(ship.isLanded()).toBeTrue();
+    });
+
+    it('should correctly calculate velocity', () => {
+      const expectedVelocity = calcVelocity(
+        0,
+        calcAcceleration(-MOON_GRAVITY),
+        timeWithoutEngine
+      );
+      const actualVelocity = ship.getVelocity();
+      expect(actualVelocity).toBeCloseTo(expectedVelocity, 3);
+    });
+
+    it('should calculate correct altitude', () => {
+      const expectedAltitude = calcAltitude(
+        startAltitude,
+        0,
+        calcAcceleration(-MOON_GRAVITY),
+        timeWithoutEngine
+      );
+      const actualAltitude = ship.getAltitude();
+      expect(actualAltitude).toBeCloseTo(expectedAltitude, 3);
+    });
+
+    it('should not consumpt fuel', () => {
+      const expectedFuelAmount = startFuelAmount;
+      const actualFuelAmount = ship.getFuelAmount();
+      expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);
+    });
+  });
 });

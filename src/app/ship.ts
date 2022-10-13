@@ -8,6 +8,7 @@ import {
   calcAltitude,
   calcFuelConsumption,
   calcVelocity,
+  isSafeLandingVelocity,
   MOON_GRAVITY,
 } from './physics';
 
@@ -79,10 +80,13 @@ export class Ship {
   }
 
   isCrashed(): boolean {
-    return false;
+    if (!this.isLanded()) {
+      return false;
+    }
+    return !isSafeLandingVelocity(this.velocity);
   }
 
   isLanded(): boolean {
-    return false;
+    return this.altitude <= 0;
   }
 }
