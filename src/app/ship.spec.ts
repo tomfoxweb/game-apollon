@@ -1,6 +1,7 @@
 import {
   NonPositiveAltitudeError,
   NonPositiveFuelAmountError,
+  NonPositiveFuelConsumptionError,
 } from './game-error';
 import {
   calcAcceleration,
@@ -14,60 +15,44 @@ import { Ship } from './ship';
 describe('Ship constructor throw Errors', () => {
   it('should throw NonPositiveAltitudeError if altitude < 0', () => {
     expect(function () {
-      const ship = new Ship(-100, 2000);
+      const ship = new Ship(-100, 2000, 3, 1);
     }).toThrowError(NonPositiveAltitudeError);
   });
 
   it('should throw NonPositiveAltitudeError if altitude === 0', () => {
     expect(function () {
-      const ship = new Ship(0, 2000);
+      const ship = new Ship(0, 2000, 3, 1);
     }).toThrowError(NonPositiveAltitudeError);
   });
 
   it('should throw NonPositiveFuelAmountError if fuelAmount < 0', () => {
     expect(function () {
-      const ship = new Ship(50, -70);
+      const ship = new Ship(50, -70, 3, 2);
     }).toThrowError(NonPositiveFuelAmountError);
   });
 
   it('should throw NonPositiveFuelAmountError if fuelAmount === 0', () => {
     expect(function () {
-      const ship = new Ship(50, 0);
+      const ship = new Ship(50, 0, 3, 4);
     }).toThrowError(NonPositiveFuelAmountError);
   });
 
-  it('should throw NonPositiveAltitudeError if both params negative', () => {
+  it('should throw NonPositiveAltitudeError if all params negative', () => {
     expect(function () {
-      const ship = new Ship(-80, -90);
+      const ship = new Ship(-80, -90, -3, -5);
     }).toThrowError(NonPositiveAltitudeError);
   });
 
-  it('should throw NonPositiveAltitudeError if both params zero', () => {
+  it('should throw NonPositiveAltitudeError if all params zero', () => {
     expect(function () {
-      const ship = new Ship(0, 0);
+      const ship = new Ship(0, 0, 0, 0);
     }).toThrowError(NonPositiveAltitudeError);
   });
 
-  it('should set altitude and fuelAmount', () => {
-    const altitude = 100;
-    const fuelAmount = 700;
-    const ship = new Ship(altitude, fuelAmount);
-    expect(ship.getAltitude()).toBe(altitude);
-    expect(ship.getFuelAmount()).toBe(fuelAmount);
-  });
-
-  it('should set zero velocity on start', () => {
-    const altitude = 100;
-    const fuelAmount = 700;
-    const ship = new Ship(altitude, fuelAmount);
-    expect(ship.getVelocity()).toBe(0);
-  });
-
-  it('should not crash on start', () => {
-    const altitude = 100;
-    const fuelAmount = 700;
-    const ship = new Ship(altitude, fuelAmount);
-    expect(ship.getVelocity()).toBe(0);
+  it('should throw NonPositiveFuelConsumptionError', () => {
+    expect(function () {
+      const ship = new Ship(10, 2, 1, -2);
+    }).toThrowError(NonPositiveFuelConsumptionError);
   });
 });
 
@@ -75,9 +60,16 @@ describe('Ship constructor init properties', () => {
   let ship: Ship;
   const startAltitude = 10;
   const startFuelAmount = 5;
+  const engineAcceleration = 2;
+  const fuelConsumption = 2;
 
   beforeEach(() => {
-    ship = new Ship(startAltitude, startFuelAmount);
+    ship = new Ship(
+      startAltitude,
+      startFuelAmount,
+      engineAcceleration,
+      fuelConsumption
+    );
   });
 
   it('should set altitude and fuelAmount', () => {
@@ -98,15 +90,20 @@ describe('Ship move', () => {
   let ship: Ship;
   const startAltitude = 10;
   const startFuelAmount = 5;
-  const SHIP_ACCELERATION = 3;
-  const FUEL_CONSUMPTION = 1.0;
+  const engineAcceleration = 3;
+  const fuelConsumption = 1.0;
 
   describe('move down 1 second', () => {
     const timeForMove = 1.0;
     let isMoved = false;
 
     beforeEach(() => {
-      ship = new Ship(startAltitude, startFuelAmount);
+      ship = new Ship(
+        startAltitude,
+        startFuelAmount,
+        engineAcceleration,
+        fuelConsumption
+      );
       isMoved = ship.move(timeForMove);
     });
 
@@ -148,7 +145,12 @@ describe('Ship move', () => {
     let isMoved = false;
 
     beforeEach(() => {
-      ship = new Ship(startAltitude, startFuelAmount);
+      ship = new Ship(
+        startAltitude,
+        startFuelAmount,
+        engineAcceleration,
+        fuelConsumption
+      );
       ship.move(timeWithoutEngine);
       ship.turnOnEngine();
       isMoved = ship.move(timeWithEngine);
@@ -173,7 +175,7 @@ describe('Ship move', () => {
       const expectedAltitude = calcAltitude(
         withoutEngineAltitude,
         withoutEngineVelocity,
-        calcAcceleration(SHIP_ACCELERATION, -MOON_GRAVITY),
+        calcAcceleration(engineAcceleration, -MOON_GRAVITY),
         timeWithEngine
       );
       const actualAltitude = ship.getAltitude();
@@ -188,7 +190,7 @@ describe('Ship move', () => {
       );
       const expectedVelocity = calcVelocity(
         withoutEngineVelocity,
-        calcAcceleration(SHIP_ACCELERATION, -MOON_GRAVITY),
+        calcAcceleration(engineAcceleration, -MOON_GRAVITY),
         timeWithEngine
       );
       const actualVelocity = ship.getVelocity();
@@ -199,7 +201,7 @@ describe('Ship move', () => {
       const expectedFuelAmount = calcFuelConsumption(
         startFuelAmount,
         timeWithEngine,
-        FUEL_CONSUMPTION
+        fuelConsumption
       );
       const actualFuelAmount = ship.getFuelAmount();
       expect(actualFuelAmount).toBeCloseTo(expectedFuelAmount, 3);

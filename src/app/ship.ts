@@ -1,6 +1,7 @@
 import {
   NonPositiveAltitudeError,
   NonPositiveFuelAmountError,
+  NonPositiveFuelConsumptionError,
 } from './game-error';
 import {
   calcAcceleration,
@@ -15,25 +16,35 @@ export class Ship {
   private fuelAmount: number;
   private velocity: number;
   private engineEnabled: boolean;
-  private readonly SHIP_ACCELERATION = 3.0;
-  private readonly FUEL_CONSUMPTION = 1.0;
+  private readonly engineAcceleration: number;
+  private readonly fuelConsumption: number;
 
-  constructor(altitude: number, fuelAmount: number) {
+  constructor(
+    altitude: number,
+    fuelAmount: number,
+    engineAcceleration: number,
+    fuelConsumption: number
+  ) {
     if (altitude <= 0) {
       throw new NonPositiveAltitudeError();
     }
     if (fuelAmount <= 0) {
       throw new NonPositiveFuelAmountError();
     }
+    if (fuelConsumption <= 0) {
+      throw new NonPositiveFuelConsumptionError();
+    }
     this.altitude = altitude;
     this.fuelAmount = fuelAmount;
+    this.engineAcceleration = engineAcceleration;
+    this.fuelConsumption = fuelConsumption;
     this.velocity = 0;
     this.engineEnabled = false;
   }
 
   move(timeForMove: number): boolean {
     const acceleration = this.engineEnabled
-      ? calcAcceleration(this.SHIP_ACCELERATION, -MOON_GRAVITY)
+      ? calcAcceleration(this.engineAcceleration, -MOON_GRAVITY)
       : calcAcceleration(-MOON_GRAVITY);
     this.altitude = calcAltitude(
       this.altitude,
@@ -46,7 +57,7 @@ export class Ship {
       this.fuelAmount = calcFuelConsumption(
         this.fuelAmount,
         timeForMove,
-        this.FUEL_CONSUMPTION
+        this.fuelConsumption
       );
     }
     if (this.altitude < 0) {

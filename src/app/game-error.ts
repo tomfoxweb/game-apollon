@@ -15,3 +15,9 @@ export class NonPositiveFuelAmountError extends GameError {
     super('Fuel amount must be positive');
   }
 }
+
+export class NonPositiveFuelConsumptionError extends GameError {
+  constructor() {
+    super('Fuel consumption amount must be positive');
+  }
+}
