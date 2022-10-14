@@ -93,18 +93,4 @@ export const figureCoordinates: FigureCoordinate[] = [
     width: 20,
     height: 20,
   },
-  {
-    figureType: FigureType.shipEngineOn,
-    x: 180,
-    y: 100,
-    width: 50,
-    height: 100,
-  },
-  {
-    figureType: FigureType.shipEngineOff,
-    x: 180,
-    y: 300,
-    width: 50,
-    height: 100,
-  },
 ];

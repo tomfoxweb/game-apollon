@@ -1,6 +1,7 @@
 import { Drawable } from './drawable';
+import { Ship } from './ship';
 
-export class ShipFigure implements Drawable {
+export class ShipFigure extends Ship implements Drawable {
   private imgEngineOff: HTMLImageElement;
   private imgEngineOn: HTMLImageElement;
   private img: HTMLImageElement;
@@ -17,8 +18,13 @@ export class ShipFigure implements Drawable {
     x: number,
     y: number,
     w: number,
-    h: number
+    h: number,
+    altitude: number,
+    fuelAmount: number,
+    acceleration: number,
+    consumption: number
   ) {
+    super(altitude, fuelAmount, acceleration, consumption);
     this.imgEngineOff = imgEngineOff;
     this.imgEngineOn = imgEngineOn;
     this.img = imgEngineOff;
@@ -30,6 +36,8 @@ export class ShipFigure implements Drawable {
   }
 
   draw(): void {
+    this.img = this.isEngineEnabled() ? this.imgEngineOn : this.imgEngineOff;
+    this.y = 500 - this.getAltitude();
     this.ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
   }
 }

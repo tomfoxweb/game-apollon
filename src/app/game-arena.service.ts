@@ -3,6 +3,7 @@ import { Drawable } from './drawable';
 import { figureCoordinates } from './figure-coordinates';
 import { GameFigure } from './game-figure';
 import { FigureType } from './game-images';
+import { ShipFigure } from './ship-figure';
 import { Viewable } from './viewable';
 
 function scaleHeightForWidth(image: HTMLImageElement, width: number): number {
@@ -18,9 +19,13 @@ export class GameArenaService {
   private ctx: CanvasRenderingContext2D | undefined;
   private images: Map<FigureType, HTMLImageElement> | undefined;
   private drawableFigures: Drawable[] = [];
+  private shipFigure: ShipFigure | undefined;
+  private lastTimeCheckPoint = window.performance.now();
 
+  private readonly INITIAL_ALTITUDE = 100;
   private readonly INITIAL_FUEL_AMOUNT = 100;
-  private readonly INITIAL_HEIGHT = 300;
+  private readonly SHIP_ACCELERATION = 3;
+  private readonly SHIP_FUEL_CONSUMPTION = 1;
 
   constructor() {}
 
@@ -59,6 +64,22 @@ export class GameArenaService {
       );
       this.drawableFigures.push(figure);
     }
+    const imageEngineOff = this.images.get(FigureType.shipEngineOff)!;
+    const imageEngineOn = this.images.get(FigureType.shipEngineOn)!;
+    this.shipFigure = new ShipFigure(
+      imageEngineOff,
+      imageEngineOn,
+      this.ctx,
+      180,
+      100,
+      50,
+      scaleHeightForWidth(imageEngineOff, 50),
+      this.INITIAL_ALTITUDE,
+      this.INITIAL_FUEL_AMOUNT,
+      this.SHIP_ACCELERATION,
+      this.SHIP_FUEL_CONSUMPTION
+    );
+    this.drawableFigures.push(this.shipFigure);
   }
 
   private drawFigures(): void {
@@ -91,10 +112,36 @@ export class GameArenaService {
 
   newGame(): void {
     this.createGameFigures();
-    this.drawFigures();
+    this.lastTimeCheckPoint = window.performance.now();
+    const intervalId = window.setInterval(() => {
+      const currentTime = window.performance.now();
+      const time = currentTime - this.lastTimeCheckPoint;
+      this.shipFigure?.move(time / 1000);
+      this.drawFigures();
+      this.showFuelAmount(this.shipFigure!.getFuelAmount());
+      this.showAltitude(this.shipFigure!.getAltitude());
+      this.showVelocity(this.shipFigure!.getVelocity());
+      if (this.shipFigure!.isLanded()) {
+        if (this.shipFigure!.isCrashed()) {
+          window.setTimeout(() => {
+            alert('Crashed!');
+          }, 100);
+        } else {
+          window.setTimeout(() => {
+            alert('Landed!');
+          }, 100);
+        }
+        window.clearInterval(intervalId);
+      }
+      this.lastTimeCheckPoint = window.performance.now();
+    }, 17);
   }
 
-  turnOnEngine(): void {}
+  turnOnEngine(): void {
+    this.shipFigure?.turnOnEngine();
+  }
 
-  turnOffEngine(): void {}
+  turnOffEngine(): void {
+    this.shipFigure?.turnOffEngine();
+  }
 }
