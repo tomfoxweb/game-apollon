@@ -89,7 +89,7 @@
     (pointerdown)="turnOnEngine()"
     (pointerup)="turnOffEngine()"
     (pointerleave)="turnOffEngine()"
-    [disabled]="!imagesLoaded || !gameStarted"
+    (pointerout)="turnOffEngine()"
   >
     Turn On Engine
   </button>

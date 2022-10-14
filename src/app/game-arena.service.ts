@@ -153,12 +153,13 @@ export class GameArenaService {
       this.showAltitude(this.shipFigure!.getAltitude());
       this.showVelocity(this.shipFigure!.getVelocity());
       if (this.shipFigure!.isLanded()) {
+        window.clearInterval(intervalId);
+        this.viewable?.finishGame();
         if (this.shipFigure!.isCrashed()) {
           this.showFailLandingMessage();
         } else {
           this.showSuccessLandingMessage();
         }
-        window.clearInterval(intervalId);
       }
       this.lastTimeCheckPoint = window.performance.now();
     }, 17);

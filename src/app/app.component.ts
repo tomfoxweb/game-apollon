@@ -74,9 +74,6 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   showAltitude(altitude: number): void {
     this.altitude = altitude;
     this.dangerAltitude = this.altitude < this.maxAltitude / 20;
-    if (this.altitude <= 0) {
-      this.gameStarted = false;
-    }
   }
 
   showVelocity(velocity: number): void {
@@ -87,6 +84,9 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   }
 
   newGame(): void {
+    if (!this.imagesLoaded) {
+      return;
+    }
     const altitude = Number(this.rangeAltitude.nativeElement.value);
     const fuel = Number(this.rangeFuelAmount.nativeElement.value);
     const acceleration = Number(this.rangeAcceleration.nativeElement.value);
@@ -96,10 +96,18 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   }
 
   turnOnEngine(): void {
-    this.gameArena.turnOnEngine();
+    if (this.imagesLoaded && this.gameStarted) {
+      this.gameArena.turnOnEngine();
+    }
   }
 
   turnOffEngine(): void {
-    this.gameArena.turnOffEngine();
+    if (this.imagesLoaded && this.gameStarted) {
+      this.gameArena.turnOffEngine();
+    }
+  }
+
+  finishGame(): void {
+    this.gameStarted = false;
   }
 }
