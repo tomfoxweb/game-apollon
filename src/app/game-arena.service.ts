@@ -28,6 +28,8 @@ export class GameArenaService {
   private shipAcceleration = 3;
   private SHIP_FUEL_CONSUMPTION = 1;
 
+  private intervalId = 0;
+
   constructor() {}
 
   setViewProps(viewable: Viewable, canvas: HTMLCanvasElement): void {
@@ -144,7 +146,7 @@ export class GameArenaService {
     this.createGameFigures();
     this.createShipFigure();
     this.lastTimeCheckPoint = window.performance.now();
-    const intervalId = window.setInterval(() => {
+    this.intervalId = window.setInterval(() => {
       const currentTime = window.performance.now();
       const time = currentTime - this.lastTimeCheckPoint;
       this.shipFigure?.move(time / 1000);
@@ -153,7 +155,8 @@ export class GameArenaService {
       this.showAltitude(this.shipFigure!.getAltitude());
       this.showVelocity(this.shipFigure!.getVelocity());
       if (this.shipFigure!.isLanded()) {
-        window.clearInterval(intervalId);
+        this.shipFigure?.turnOffEngine();
+        window.clearInterval(this.intervalId);
         this.viewable?.finishGame();
         if (this.shipFigure!.isCrashed()) {
           this.showFailLandingMessage();
