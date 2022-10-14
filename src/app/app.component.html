@@ -88,9 +88,9 @@
   </div>
   <button
     class="button-engine"
-    (mousedown)="turnOnEngine()"
-    (mouseup)="turnOffEngine()"
-    (mouseleave)="turnOffEngine()"
+    (pointerdown)="turnOnEngine()"
+    (pointerup)="turnOffEngine()"
+    (pointerleave)="turnOffEngine()"
     [disabled]="!imagesLoaded"
   >
     Turn On Engine
