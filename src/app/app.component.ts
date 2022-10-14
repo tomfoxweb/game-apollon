@@ -17,6 +17,7 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   @ViewChild('canvasGame') canvasGame!: ElementRef<HTMLCanvasElement>;
   fuelAmount = 0;
   velocity = 0;
+  altitude = 0;
 
   constructor(private gameArena: GameArenaService) {}
 
@@ -28,6 +29,10 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
 
   showFuelAmount(fuelAmount: number): void {
     this.fuelAmount = fuelAmount;
+  }
+
+  showAltitude(altitude: number): void {
+    this.altitude = altitude;
   }
 
   showVelocity(velocity: number): void {

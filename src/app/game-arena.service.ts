@@ -32,6 +32,13 @@ export class GameArenaService {
     this.viewable.showVelocity(velocity);
   }
 
+  private showAltitude(altitude: number): void {
+    if (this.viewable === undefined) {
+      throw new Error('Undefined View on GameArenaService');
+    }
+    this.viewable.showAltitude(altitude);
+  }
+
   newGame(): void {}
 
   turnOnEngine(): void {}
