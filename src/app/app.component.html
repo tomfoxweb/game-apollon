@@ -4,6 +4,7 @@
     <output #outputAltitude for="rangeAltitude">{{ valueAltitude }}</output>
     <input
       #rangeAltitude
+      [disabled]="!imagesLoaded"
       id="rangeAltitude"
       type="range"
       min="{{ minAltitude }}"
@@ -19,6 +20,7 @@
     }}</output>
     <input
       #rangeFuelAmount
+      [disabled]="!imagesLoaded"
       id="rangeFuelAmount"
       type="range"
       min="{{ minFuelAmount }}"
@@ -34,6 +36,7 @@
     }}</output>
     <input
       #rangeAcceleration
+      [disabled]="!imagesLoaded"
       id="rangeAcceleration"
       type="range"
       min="{{ minShipAcceleration }}"
@@ -50,6 +53,7 @@
     }}</output>
     <input
       #rangeSafeVelocity
+      [disabled]="!imagesLoaded"
       id="rangeSafeVelocity"
       type="range"
       min="{{ minSafeVelocity }}"
@@ -59,7 +63,13 @@
       (input)="outputSafeVelocity.value = rangeSafeVelocity.value"
     />
   </div>
-  <button class="button-new-game" (click)="newGame()">New Game</button>
+  <button
+    class="button-new-game"
+    (click)="newGame()"
+    [disabled]="!imagesLoaded"
+  >
+    New Game
+  </button>
   <canvas #canvasGame class="canvas-game" width="370" height="500"></canvas>
   <div class="info-container">
     <span class="info-fuel" [class.danger-value]="dangerFuelAmount"
@@ -81,6 +91,7 @@
     (mousedown)="turnOnEngine()"
     (mouseup)="turnOffEngine()"
     (mouseleave)="turnOffEngine()"
+    [disabled]="!imagesLoaded"
   >
     Turn On Engine
   </button>

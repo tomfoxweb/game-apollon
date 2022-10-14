@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   rangeSafeVelocity!: ElementRef<HTMLInputElement>;
   minAltitude = 10;
   maxAltitude = 500;
-  valueAltitude = 500;
+  valueAltitude = 400;
   minFuelAmount = 10;
   maxFuelAmount = 100;
   valueFuelAmount = 50;
@@ -42,6 +42,7 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   positiveVelocity = false;
   dangerAltitude = false;
   dangerFuelAmount = false;
+  imagesLoaded = false;
 
   private images: Promise<Map<FigureType, HTMLImageElement>> | undefined;
 
@@ -51,8 +52,12 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   ) {}
 
   ngAfterViewInit(): void {
+    this.gameArena.setViewProps(this, this.canvasGame.nativeElement);
+    this.gameArena.showLoadingMessage();
     this.images?.then((images) => {
-      this.gameArena.setViewProps(this, this.canvasGame.nativeElement, images);
+      this.gameArena.setImages(images);
+      this.gameArena.showIntroFigures();
+      this.imagesLoaded = true;
     });
   }
 

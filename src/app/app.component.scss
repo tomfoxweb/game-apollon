@@ -22,6 +22,13 @@ $content-max-width: 370px;
       color: white;
       background-color: darkseagreen;
     }
+
+    &:disabled {
+      color: gray;
+      background-color: lightgray;
+      border: 1px solid gray;
+      box-shadow: none;
+    }
   }
 
   .canvas-game {

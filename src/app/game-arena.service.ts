@@ -30,11 +30,7 @@ export class GameArenaService {
 
   constructor() {}
 
-  setViewProps(
-    viewable: Viewable,
-    canvas: HTMLCanvasElement,
-    images: Map<FigureType, HTMLImageElement>
-  ): void {
+  setViewProps(viewable: Viewable, canvas: HTMLCanvasElement): void {
     this.viewable = viewable;
     this.canvas = canvas;
     const ctx = this.canvas.getContext('2d');
@@ -42,6 +38,9 @@ export class GameArenaService {
       throw new Error("Couldn't create canvas rendering 2d context");
     }
     this.ctx = ctx;
+  }
+
+  setImages(images: Map<FigureType, HTMLImageElement>): void {
     this.images = images;
   }
 
@@ -117,6 +116,19 @@ export class GameArenaService {
       throw new Error('Undefined View on GameArenaService');
     }
     this.viewable.showAltitude(altitude);
+  }
+
+  showLoadingMessage(): void {
+    this.ctx!.save();
+    this.ctx!.font = '36px monospace';
+    this.ctx!.fillStyle = 'white';
+    this.ctx!.fillText('Loading...', 95, 250);
+    this.ctx!.restore();
+  }
+
+  showIntroFigures(): void {
+    this.createGameFigures();
+    this.drawFigures();
   }
 
   newGame(
