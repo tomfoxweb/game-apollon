@@ -142,18 +142,30 @@ export class GameArenaService {
       this.showVelocity(this.shipFigure!.getVelocity());
       if (this.shipFigure!.isLanded()) {
         if (this.shipFigure!.isCrashed()) {
-          window.setTimeout(() => {
-            alert('Crashed!');
-          }, 100);
+          this.showFailLandingMessage();
         } else {
-          window.setTimeout(() => {
-            alert('Landed!');
-          }, 100);
+          this.showSuccessLandingMessage();
         }
         window.clearInterval(intervalId);
       }
       this.lastTimeCheckPoint = window.performance.now();
     }, 17);
+  }
+
+  private showFailLandingMessage(): void {
+    this.ctx!.save();
+    this.ctx!.font = '36px monospace';
+    this.ctx!.fillStyle = 'orange';
+    this.ctx!.fillText('Fail!', 140, 250);
+    this.ctx!.restore();
+  }
+
+  private showSuccessLandingMessage(): void {
+    this.ctx!.save();
+    this.ctx!.font = '36px monospace';
+    this.ctx!.fillStyle = 'gold';
+    this.ctx!.fillText('Success!', 110, 250);
+    this.ctx!.restore();
   }
 
   turnOnEngine(): void {
