@@ -70,14 +70,18 @@ export class GameArenaService {
   private createShipFigure(): void {
     const imageEngineOff = this.images!.get(FigureType.shipEngineOff)!;
     const imageEngineOn = this.images!.get(FigureType.shipEngineOn)!;
+    const x = 170;
+    const w = 30;
+    const h = scaleHeightForWidth(imageEngineOff, w);
+    const y = this.initialAltitude - (500 - 25 - h);
     this.shipFigure = new ShipFigure(
       imageEngineOff,
       imageEngineOn,
       this.ctx!,
-      180,
-      100,
-      50,
-      scaleHeightForWidth(imageEngineOff, 50),
+      x,
+      y,
+      w,
+      h,
       this.initialAltitude,
       this.initialFuelAmount,
       this.shipAcceleration,

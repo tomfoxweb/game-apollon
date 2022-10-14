@@ -38,7 +38,10 @@ export class ShipFigure extends Ship implements Drawable {
 
   draw(): void {
     this.img = this.isEngineEnabled() ? this.imgEngineOn : this.imgEngineOff;
-    this.y = 500 - this.getAltitude() - this.h;
+    if (this.isLanded()) {
+      this.img = this.imgEngineOff;
+    }
+    this.y = 475 - this.getAltitude() - this.h;
     this.ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
   }
 }
