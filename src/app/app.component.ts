@@ -6,6 +6,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { GameArenaService } from './game-arena.service';
+import { FigureType } from './game-images';
+import { ImageProviderService } from './image-provider.service';
 import { Viewable } from './viewable';
 
 @Component({
@@ -19,13 +21,22 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   velocity = 0;
   altitude = 0;
 
-  constructor(private gameArena: GameArenaService) {}
+  private images: Promise<Map<FigureType, HTMLImageElement>> | undefined;
+
+  constructor(
+    private gameArena: GameArenaService,
+    private imageProvider: ImageProviderService
+  ) {}
 
   ngAfterViewInit(): void {
-    this.gameArena.setViewable(this, this.canvasGame.nativeElement);
+    this.images?.then((images) => {
+      this.gameArena.setViewProps(this, this.canvasGame.nativeElement, images);
+    });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.images = this.imageProvider.loadImages();
+  }
 
   showFuelAmount(fuelAmount: number): void {
     this.fuelAmount = fuelAmount;
