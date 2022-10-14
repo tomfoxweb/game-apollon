@@ -30,10 +30,10 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   maxFuelAmount = 100;
   valueFuelAmount = 50;
   minShipAcceleration = 2.0;
-  maxShipAcceleration = 10.0;
+  maxShipAcceleration = 20.0;
   valueShipAcceleration = 5.0;
   minSafeVelocity = 1.0;
-  maxSafeVelocity = 5.0;
+  maxSafeVelocity = 10.0;
   valueSafeVelocity = 3.0;
   fuelAmount = this.valueFuelAmount;
   velocity = 0;
@@ -43,6 +43,7 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   dangerAltitude = false;
   dangerFuelAmount = false;
   imagesLoaded = false;
+  gameStarted = false;
 
   private images: Promise<Map<FigureType, HTMLImageElement>> | undefined;
 
@@ -73,6 +74,9 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   showAltitude(altitude: number): void {
     this.altitude = altitude;
     this.dangerAltitude = this.altitude < this.maxAltitude / 20;
+    if (this.altitude <= 0) {
+      this.gameStarted = false;
+    }
   }
 
   showVelocity(velocity: number): void {
@@ -88,6 +92,7 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
     const acceleration = Number(this.rangeAcceleration.nativeElement.value);
     const velocity = Number(this.rangeSafeVelocity.nativeElement.value);
     this.gameArena.newGame(altitude, fuel, acceleration, velocity);
+    this.gameStarted = true;
   }
 
   turnOnEngine(): void {

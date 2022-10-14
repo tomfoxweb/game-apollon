@@ -75,9 +75,7 @@
     <span class="info-fuel" [class.danger-value]="dangerFuelAmount"
       >{{ fuelAmount | number: "1.1-1" }} liters</span
     >
-    <span class="info-altitude" [class.danger-value]="dangerAltitude"
-      >{{ altitude | number: "1.1-1" }} m</span
-    >
+    <span class="info-altitude">{{ altitude | number: "1.1-1" }} m</span>
     <span
       class="info-velocity"
       [class.danger-value]="dangerVelocity"
@@ -91,7 +89,7 @@
     (pointerdown)="turnOnEngine()"
     (pointerup)="turnOffEngine()"
     (pointerleave)="turnOffEngine()"
-    [disabled]="!imagesLoaded"
+    [disabled]="!imagesLoaded || !gameStarted"
   >
     Turn On Engine
   </button>
