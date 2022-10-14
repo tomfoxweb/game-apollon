@@ -22,9 +22,10 @@ export class ShipFigure extends Ship implements Drawable {
     altitude: number,
     fuelAmount: number,
     acceleration: number,
-    consumption: number
+    consumption: number,
+    landingVelocity: number
   ) {
-    super(altitude, fuelAmount, acceleration, consumption);
+    super(altitude, fuelAmount, acceleration, consumption, landingVelocity);
     this.imgEngineOff = imgEngineOff;
     this.imgEngineOn = imgEngineOn;
     this.img = imgEngineOff;
@@ -37,7 +38,7 @@ export class ShipFigure extends Ship implements Drawable {
 
   draw(): void {
     this.img = this.isEngineEnabled() ? this.imgEngineOn : this.imgEngineOff;
-    this.y = 500 - this.getAltitude();
+    this.y = 500 - this.getAltitude() - this.h;
     this.ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
   }
 }

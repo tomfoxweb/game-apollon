@@ -22,10 +22,11 @@ export class GameArenaService {
   private shipFigure: ShipFigure | undefined;
   private lastTimeCheckPoint = window.performance.now();
 
-  private readonly INITIAL_ALTITUDE = 100;
-  private readonly INITIAL_FUEL_AMOUNT = 100;
-  private readonly SHIP_ACCELERATION = 3;
-  private readonly SHIP_FUEL_CONSUMPTION = 1;
+  private initialAltitude = 100;
+  private initialFuelAmount = 100;
+  private safeLandingVelocity = 3;
+  private shipAcceleration = 3;
+  private SHIP_FUEL_CONSUMPTION = 1;
 
   constructor() {}
 
@@ -64,20 +65,24 @@ export class GameArenaService {
       );
       this.drawableFigures.push(figure);
     }
-    const imageEngineOff = this.images.get(FigureType.shipEngineOff)!;
-    const imageEngineOn = this.images.get(FigureType.shipEngineOn)!;
+  }
+
+  private createShipFigure(): void {
+    const imageEngineOff = this.images!.get(FigureType.shipEngineOff)!;
+    const imageEngineOn = this.images!.get(FigureType.shipEngineOn)!;
     this.shipFigure = new ShipFigure(
       imageEngineOff,
       imageEngineOn,
-      this.ctx,
+      this.ctx!,
       180,
       100,
       50,
       scaleHeightForWidth(imageEngineOff, 50),
-      this.INITIAL_ALTITUDE,
-      this.INITIAL_FUEL_AMOUNT,
-      this.SHIP_ACCELERATION,
-      this.SHIP_FUEL_CONSUMPTION
+      this.initialAltitude,
+      this.initialFuelAmount,
+      this.shipAcceleration,
+      this.SHIP_FUEL_CONSUMPTION,
+      this.safeLandingVelocity
     );
     this.drawableFigures.push(this.shipFigure);
   }
@@ -110,8 +115,18 @@ export class GameArenaService {
     this.viewable.showAltitude(altitude);
   }
 
-  newGame(): void {
+  newGame(
+    altitude: number,
+    fuelAmount: number,
+    acceleration: number,
+    safeVelocity: number
+  ): void {
+    this.initialAltitude = altitude;
+    this.initialFuelAmount = fuelAmount;
+    this.shipAcceleration = acceleration;
+    this.safeLandingVelocity = safeVelocity;
     this.createGameFigures();
+    this.createShipFigure();
     this.lastTimeCheckPoint = window.performance.now();
     const intervalId = window.setInterval(() => {
       const currentTime = window.performance.now();

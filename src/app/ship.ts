@@ -20,12 +20,14 @@ export class Ship {
   private engineEnabled: boolean;
   private readonly engineAcceleration: number;
   private readonly fuelConsumption: number;
+  private readonly maxSafeLandingVelocity: number;
 
   constructor(
     altitude: number,
     fuelAmount: number,
     engineAcceleration: number,
-    fuelConsumption: number
+    fuelConsumption: number,
+    maxSafeLandingVelocity: number
   ) {
     if (altitude <= 0) {
       throw new NonPositiveAltitudeError();
@@ -40,6 +42,7 @@ export class Ship {
     this.fuelAmount = fuelAmount;
     this.engineAcceleration = engineAcceleration;
     this.fuelConsumption = fuelConsumption;
+    this.maxSafeLandingVelocity = maxSafeLandingVelocity;
     this.velocity = 0;
     this.engineEnabled = false;
   }
@@ -113,7 +116,7 @@ export class Ship {
     if (!this.isLanded()) {
       return false;
     }
-    return !isSafeLandingVelocity(this.velocity);
+    return !isSafeLandingVelocity(this.velocity, this.maxSafeLandingVelocity);
   }
 
   isLanded(): boolean {

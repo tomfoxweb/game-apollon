@@ -17,9 +17,27 @@ import { Viewable } from './viewable';
 })
 export class AppComponent implements OnInit, AfterViewInit, Viewable {
   @ViewChild('canvasGame') canvasGame!: ElementRef<HTMLCanvasElement>;
-  fuelAmount = 0;
+  @ViewChild('rangeAltitude') rangeAltitude!: ElementRef<HTMLInputElement>;
+  @ViewChild('rangeFuelAmount') rangeFuelAmount!: ElementRef<HTMLInputElement>;
+  @ViewChild('rangeAcceleration')
+  rangeAcceleration!: ElementRef<HTMLInputElement>;
+  @ViewChild('rangeSafeVelocity')
+  rangeSafeVelocity!: ElementRef<HTMLInputElement>;
+  minAltitude = 10;
+  maxAltitude = 500;
+  valueAltitude = 500;
+  minFuelAmount = 10;
+  maxFuelAmount = 100;
+  valueFuelAmount = 50;
+  minShipAcceleration = 2.0;
+  maxShipAcceleration = 10.0;
+  valueShipAcceleration = 5.0;
+  minSafeVelocity = 1.0;
+  maxSafeVelocity = 5.0;
+  valueSafeVelocity = 3.0;
+  fuelAmount = this.valueFuelAmount;
   velocity = 0;
-  altitude = 0;
+  altitude = this.valueAltitude;
 
   private images: Promise<Map<FigureType, HTMLImageElement>> | undefined;
 
@@ -51,7 +69,11 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   }
 
   newGame(): void {
-    this.gameArena.newGame();
+    const altitude = Number(this.rangeAltitude.nativeElement.value);
+    const fuel = Number(this.rangeFuelAmount.nativeElement.value);
+    const acceleration = Number(this.rangeAcceleration.nativeElement.value);
+    const velocity = Number(this.rangeSafeVelocity.nativeElement.value);
+    this.gameArena.newGame(altitude, fuel, acceleration, velocity);
   }
 
   turnOnEngine(): void {

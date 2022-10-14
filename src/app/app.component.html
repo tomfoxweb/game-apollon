@@ -1,6 +1,66 @@
 <div class="content-container">
+  <div class="range-container">
+    <label for="rangeAltitude">Initial Altitude (m) </label>
+    <output #outputAltitude for="rangeAltitude">{{ valueAltitude }}</output>
+    <input
+      #rangeAltitude
+      id="rangeAltitude"
+      type="range"
+      min="{{ minAltitude }}"
+      max="{{ maxAltitude }}"
+      value="{{ valueAltitude }}"
+      (input)="outputAltitude.value = rangeAltitude.value"
+    />
+  </div>
+  <div class="range-container">
+    <label for="rangeFuelAmount">Initial Fuel Amount (liters) </label>
+    <output #outputFuelAmount for="rangeFuelAmount">{{
+      valueFuelAmount
+    }}</output>
+    <input
+      #rangeFuelAmount
+      id="rangeFuelAmount"
+      type="range"
+      min="{{ minFuelAmount }}"
+      max="{{ maxFuelAmount }}"
+      value="{{ valueFuelAmount }}"
+      (input)="outputFuelAmount.value = rangeFuelAmount.value"
+    />
+  </div>
+  <div class="range-container">
+    <label for="rangeAcceleration">Ship Acceleration (m/s<sup>2</sup>) </label>
+    <output #outputAcceleration for="rangeAcceleration">{{
+      valueShipAcceleration
+    }}</output>
+    <input
+      #rangeAcceleration
+      id="rangeAcceleration"
+      type="range"
+      min="{{ minShipAcceleration }}"
+      max="{{ maxShipAcceleration }}"
+      value="{{ valueShipAcceleration }}"
+      step="0.1"
+      (input)="outputAcceleration.value = rangeAcceleration.value"
+    />
+  </div>
+  <div class="range-container">
+    <label for="rangeSafeVelocity">Max Landing Velocity (m/s) </label>
+    <output #outputSafeVelocity for="rangeSafeVelocity">{{
+      valueSafeVelocity
+    }}</output>
+    <input
+      #rangeSafeVelocity
+      id="rangeSafeVelocity"
+      type="range"
+      min="{{ minSafeVelocity }}"
+      max="{{ maxSafeVelocity }}"
+      value="{{ valueSafeVelocity }}"
+      step="0.1"
+      (input)="outputSafeVelocity.value = rangeSafeVelocity.value"
+    />
+  </div>
   <button class="button-new-game" (click)="newGame()">New Game</button>
-  <canvas #canvasGame class="canvas-game" width="400" height="600"></canvas>
+  <canvas #canvasGame class="canvas-game" width="370" height="500"></canvas>
   <div class="info-container">
     <span class="info-fuel">{{ fuelAmount | number: "1.1-1" }} liters</span>
     <span class="info-altitude">{{ altitude | number: "1.1-1" }} m</span>

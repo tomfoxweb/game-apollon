@@ -16,43 +16,43 @@ import { Ship } from './ship';
 describe('Ship constructor throw Errors', () => {
   it('should throw NonPositiveAltitudeError if altitude < 0', () => {
     expect(function () {
-      const ship = new Ship(-100, 2000, 3, 1);
+      const ship = new Ship(-100, 2000, 3, 1, 1);
     }).toThrowError(NonPositiveAltitudeError);
   });
 
   it('should throw NonPositiveAltitudeError if altitude === 0', () => {
     expect(function () {
-      const ship = new Ship(0, 2000, 3, 1);
+      const ship = new Ship(0, 2000, 3, 1, 1);
     }).toThrowError(NonPositiveAltitudeError);
   });
 
   it('should throw NonPositiveFuelAmountError if fuelAmount < 0', () => {
     expect(function () {
-      const ship = new Ship(50, -70, 3, 2);
+      const ship = new Ship(50, -70, 3, 2, 1);
     }).toThrowError(NonPositiveFuelAmountError);
   });
 
   it('should throw NonPositiveFuelAmountError if fuelAmount === 0', () => {
     expect(function () {
-      const ship = new Ship(50, 0, 3, 4);
+      const ship = new Ship(50, 0, 3, 4, 1);
     }).toThrowError(NonPositiveFuelAmountError);
   });
 
   it('should throw NonPositiveAltitudeError if all params negative', () => {
     expect(function () {
-      const ship = new Ship(-80, -90, -3, -5);
+      const ship = new Ship(-80, -90, -3, -5, 1);
     }).toThrowError(NonPositiveAltitudeError);
   });
 
   it('should throw NonPositiveAltitudeError if all params zero', () => {
     expect(function () {
-      const ship = new Ship(0, 0, 0, 0);
+      const ship = new Ship(0, 0, 0, 0, 1);
     }).toThrowError(NonPositiveAltitudeError);
   });
 
   it('should throw NonPositiveFuelConsumptionError', () => {
     expect(function () {
-      const ship = new Ship(10, 2, 1, -2);
+      const ship = new Ship(10, 2, 1, -2, 1);
     }).toThrowError(NonPositiveFuelConsumptionError);
   });
 });
@@ -69,7 +69,8 @@ describe('Ship constructor init properties', () => {
       startAltitude,
       startFuelAmount,
       engineAcceleration,
-      fuelConsumption
+      fuelConsumption,
+      1
     );
   });
 
@@ -106,7 +107,8 @@ describe('Ship move', () => {
         startAltitude,
         startFuelAmount,
         engineAcceleration,
-        fuelConsumption
+        fuelConsumption,
+        1
       );
       ship.move(timeForMove);
     });
@@ -152,7 +154,8 @@ describe('Ship move', () => {
         startAltitude,
         startFuelAmount,
         engineAcceleration,
-        fuelConsumption
+        fuelConsumption,
+        1
       );
       ship.move(timeWithoutEngine);
       ship.turnOnEngine();
@@ -214,7 +217,8 @@ describe('Ship move', () => {
         startAltitude,
         startFuelAmount,
         engineAcceleration,
-        fuelConsumption
+        fuelConsumption,
+        1
       );
       ship.move(timeWithoutEngine);
     });
@@ -255,7 +259,8 @@ describe('Ship move', () => {
         startAltitude,
         startFuelAmount,
         engineAcceleration,
-        fuelConsumption
+        fuelConsumption,
+        1
       );
       ship.turnOnEngine();
       ship.move(timeWithEngine);
@@ -309,7 +314,8 @@ describe('Successfully landing after free fall', () => {
         startAltitude,
         startFuelAmount,
         engineAcceleration,
-        fuelConsumption
+        fuelConsumption,
+        1
       );
       ship.move(timeForMove);
     });
@@ -349,7 +355,8 @@ describe('Successfully landing after free fall', () => {
         startAltitude,
         startFuelAmount,
         engineAcceleration,
-        fuelConsumption
+        fuelConsumption,
+        1
       );
       ship.move(timeForMove);
     });
@@ -397,7 +404,8 @@ describe('Successfully landing after free fall', () => {
         startAltitude,
         startFuelAmount,
         engineAcceleration,
-        fuelConsumption
+        fuelConsumption,
+        1
       );
       ship.move(time1down);
       ship.turnOnEngine();
