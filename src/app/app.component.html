@@ -12,8 +12,6 @@
       value="{{ valueAltitude }}"
       (input)="outputAltitude.value = rangeAltitude.value"
     />
-  </div>
-  <div class="range-container">
     <label for="rangeFuelAmount">Initial fuel amount (liters) </label>
     <output #outputFuelAmount for="rangeFuelAmount">{{
       valueFuelAmount
@@ -28,8 +26,6 @@
       value="{{ valueFuelAmount }}"
       (input)="outputFuelAmount.value = rangeFuelAmount.value"
     />
-  </div>
-  <div class="range-container">
     <label for="rangeAcceleration">Ship acceleration (m/s<sup>2</sup>) </label>
     <output #outputAcceleration for="rangeAcceleration">{{
       valueShipAcceleration
@@ -45,8 +41,6 @@
       step="0.1"
       (input)="outputAcceleration.value = rangeAcceleration.value"
     />
-  </div>
-  <div class="range-container">
     <label for="rangeSafeVelocity">Max landing velocity (m/s) </label>
     <output #outputSafeVelocity for="rangeSafeVelocity">{{
       valueSafeVelocity

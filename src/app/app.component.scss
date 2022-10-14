@@ -44,19 +44,16 @@ $content-max-width: 370px;
 
   .range-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    justify-content: center;
+    grid-template-columns: repeat(2, auto);
     label {
-      grid-row: 1;
       grid-column: 1;
     }
     output {
-      justify-self: center;
-      grid-row: 1;
       grid-column: 2;
     }
     input[type="range"] {
-      grid-row: 2;
+      display: block;
+      margin-bottom: 0.5em;
       grid-column: 1 / 3;
     }
   }
