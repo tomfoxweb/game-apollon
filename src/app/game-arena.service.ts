@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Drawable } from './drawable';
+import { figureCoordinates } from './figure-coordinates';
 import { GameFigure } from './game-figure';
 import { FigureType } from './game-images';
 import { Viewable } from './viewable';
+
+function scaleHeightForWidth(image: HTMLImageElement, width: number): number {
+  return (width / image.width) * image.height;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -39,9 +44,21 @@ export class GameArenaService {
     if (this.images === undefined) {
       throw new Error('Undefined images in GameArenaService');
     }
-    const imageEarth = this.images.get(FigureType.earth)!;
-    const earthFigure = new GameFigure(imageEarth, this.ctx!, 10, 10, 50, 50);
-    this.drawableFigures.push(earthFigure);
+    if (this.ctx === undefined) {
+      throw new Error('Undefined rendering context in GameArenaService');
+    }
+    for (const c of figureCoordinates) {
+      const image = this.images.get(c.figureType)!;
+      const figure = new GameFigure(
+        image,
+        this.ctx,
+        c.x,
+        c.y,
+        c.width,
+        scaleHeightForWidth(image, c.width)
+      );
+      this.drawableFigures.push(figure);
+    }
   }
 
   private drawFigures(): void {
