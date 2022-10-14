@@ -18,6 +18,10 @@ $content-max-width: 370px;
     border-radius: 5px;
     box-shadow: 0px 0px 1px 1px seagreen;
 
+    &.button-engine {
+      padding: 1em;
+    }
+
     &:active {
       color: white;
       background-color: darkseagreen;
@@ -68,14 +72,14 @@ $content-max-width: 370px;
       font-size: inherit;
       text-align: center;
       color: white;
-      background-color: limegreen;
+      background-color: salmon;
 
       &.danger-value {
         background-color: red;
       }
 
       &.over-value {
-        background-color: green;
+        background-color: limegreen;
       }
     }
   }
