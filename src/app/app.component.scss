@@ -42,11 +42,23 @@ $content-max-width: 370px;
   .info-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
     font-size: 1rem;
 
     span {
+      display: block;
+      padding: 0.5em;
       font-size: inherit;
+      text-align: center;
+      color: white;
+      background-color: limegreen;
+
+      &.danger-value {
+        background-color: red;
+      }
+
+      &.over-value {
+        background-color: green;
+      }
     }
   }
 }

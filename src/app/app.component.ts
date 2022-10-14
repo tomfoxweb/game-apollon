@@ -38,6 +38,10 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   fuelAmount = this.valueFuelAmount;
   velocity = 0;
   altitude = this.valueAltitude;
+  dangerVelocity = false;
+  positiveVelocity = false;
+  dangerAltitude = false;
+  dangerFuelAmount = false;
 
   private images: Promise<Map<FigureType, HTMLImageElement>> | undefined;
 
@@ -58,14 +62,19 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
 
   showFuelAmount(fuelAmount: number): void {
     this.fuelAmount = fuelAmount;
+    this.dangerFuelAmount = this.fuelAmount < this.maxFuelAmount / 20;
   }
 
   showAltitude(altitude: number): void {
     this.altitude = altitude;
+    this.dangerAltitude = this.altitude < this.maxAltitude / 20;
   }
 
   showVelocity(velocity: number): void {
     this.velocity = velocity;
+    const initialVelocity = Number(this.rangeSafeVelocity.nativeElement.value);
+    this.dangerVelocity = this.velocity < -initialVelocity;
+    this.positiveVelocity = this.velocity > 0;
   }
 
   newGame(): void {

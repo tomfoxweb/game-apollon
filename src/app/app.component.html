@@ -62,9 +62,19 @@
   <button class="button-new-game" (click)="newGame()">New Game</button>
   <canvas #canvasGame class="canvas-game" width="370" height="500"></canvas>
   <div class="info-container">
-    <span class="info-fuel">{{ fuelAmount | number: "1.1-1" }} liters</span>
-    <span class="info-altitude">{{ altitude | number: "1.1-1" }} m</span>
-    <span class="info-velocity">{{ velocity | number: "1.1-1" }} m/s</span>
+    <span class="info-fuel" [class.danger-value]="dangerFuelAmount"
+      >{{ fuelAmount | number: "1.1-1" }} liters</span
+    >
+    <span class="info-altitude" [class.danger-value]="dangerAltitude"
+      >{{ altitude | number: "1.1-1" }} m</span
+    >
+    <span
+      class="info-velocity"
+      [class.danger-value]="dangerVelocity"
+      [class.over-value]="positiveVelocity"
+    >
+      {{ velocity | number: "1.1-1" }} m/s
+    </span>
   </div>
   <button
     class="button-engine"
