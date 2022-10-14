@@ -11,15 +11,15 @@ interface ImageInfo {
 })
 export class ImageProviderService {
   private imgSources = new Map<FigureType, string>([
-    [FigureType.shipEngineOff, '../assets/images/rocket.svg'],
-    [FigureType.shipEngineOn, '../assets/images/rocket-active.svg'],
-    [FigureType.earth, '../assets/images/earth.svg'],
-    [FigureType.moon, '../assets/images/moon.svg'],
-    [FigureType.star1, '../assets/images/star1.svg'],
-    [FigureType.star2, '../assets/images/star2.svg'],
-    [FigureType.star3, '../assets/images/star3.svg'],
-    [FigureType.star4, '../assets/images/star4.svg'],
-    [FigureType.star5, '../assets/images/star5.svg'],
+    [FigureType.shipEngineOff, '../assets/images/rocket.png'],
+    [FigureType.shipEngineOn, '../assets/images/rocket-active.png'],
+    [FigureType.earth, '../assets/images/earth.png'],
+    [FigureType.moon, '../assets/images/moon.png'],
+    [FigureType.star1, '../assets/images/star1.png'],
+    [FigureType.star2, '../assets/images/star2.png'],
+    [FigureType.star3, '../assets/images/star3.png'],
+    [FigureType.star4, '../assets/images/star4.png'],
+    [FigureType.star5, '../assets/images/star5.png'],
   ]);
 
   constructor() {}
