@@ -19,7 +19,7 @@ export const figureCoordinates: FigureCoordinate[] = [
   {
     figureType: FigureType.moon,
     x: -235,
-    y: 451,
+    y: 401,
     width: 700,
     height: 100,
   },
@@ -110,7 +110,7 @@ export const figureCoordinates: FigureCoordinate[] = [
   {
     figureType: FigureType.star4,
     x: 80,
-    y: 410,
+    y: 350,
     width: 15,
     height: 15,
   },
@@ -145,14 +145,14 @@ export const figureCoordinates: FigureCoordinate[] = [
   {
     figureType: FigureType.star5,
     x: 310,
-    y: 370,
+    y: 330,
     width: 10,
     height: 10,
   },
   {
     figureType: FigureType.star5,
     x: 180,
-    y: 290,
+    y: 260,
     width: 10,
     height: 10,
   },

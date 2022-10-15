@@ -74,7 +74,7 @@ export class GameArenaService {
     const x = 170;
     const w = 30;
     const h = scaleHeightForWidth(imageEngineOff, w);
-    const y = this.initialAltitude - (500 - 25 - h);
+    const y = this.initialAltitude - (450 - 25 - h);
     this.shipFigure = new ShipFigure(
       imageEngineOff,
       imageEngineOn,
@@ -124,7 +124,7 @@ export class GameArenaService {
     this.ctx!.save();
     this.ctx!.font = '36px monospace';
     this.ctx!.fillStyle = 'white';
-    this.ctx!.fillText('Loading...', 95, 250);
+    this.ctx!.fillText('Loading...', 95, 225);
     this.ctx!.restore();
   }
 
@@ -172,7 +172,7 @@ export class GameArenaService {
     this.ctx!.save();
     this.ctx!.font = '36px monospace';
     this.ctx!.fillStyle = 'orange';
-    this.ctx!.fillText('Fail!', 140, 250);
+    this.ctx!.fillText('Fail!', 140, 225);
     this.ctx!.restore();
   }
 
@@ -180,7 +180,7 @@ export class GameArenaService {
     this.ctx!.save();
     this.ctx!.font = '36px monospace';
     this.ctx!.fillStyle = 'gold';
-    this.ctx!.fillText('Success!', 110, 250);
+    this.ctx!.fillText('Success!', 110, 225);
     this.ctx!.restore();
   }
 
