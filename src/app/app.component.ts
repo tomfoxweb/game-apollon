@@ -24,8 +24,8 @@ export class AppComponent implements OnInit, AfterViewInit, Viewable {
   @ViewChild('rangeSafeVelocity')
   rangeSafeVelocity!: ElementRef<HTMLInputElement>;
   minAltitude = 10;
-  maxAltitude = 500;
-  valueAltitude = 400;
+  maxAltitude = 450;
+  valueAltitude = 350;
   minFuelAmount = 10;
   maxFuelAmount = 100;
   valueFuelAmount = 50;
